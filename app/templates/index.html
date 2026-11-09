@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="AlertaBairro: monitoramento comunitário demonstrativo de ocorrências relacionadas à chuva em São Paulo.">
+  <title>AlertaBairro | Comunidade informada</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="AlertaBairro, página inicial">
+        <span class="brand-mark" aria-hidden="true">A<span>•</span></span>
+        <span class="brand-text">Alerta<span>Bairro</span><small>CitizenTech • São Paulo</small></span>
+      </a>
+      <div class="top-actions"><span class="live-dot" aria-hidden="true"></span><span>Protótipo acadêmico</span></div>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="titulo-hero">
+        <div class="hero-content">
+          <span class="eyebrow">CIDADE MAIS PREPARADA, PESSOAS MAIS INFORMADAS</span>
+          <h1 id="titulo-hero">Sua região.<br><em>Sua comunidade.</em><br>Mais informação.</h1>
+          <p>Consulte a tendência de chuva e acompanhe relatos colaborativos de alagamento, bueiros obstruídos e vias prejudicadas.</p>
+          <a class="hero-link" href="#registrar">Registrar ocorrência <span aria-hidden="true">↗</span></a>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="signal signal-one"></div><div class="signal signal-two"></div>
+          <div class="illustration"><div class="cloud">☁</div><div class="rain">╱ ╱ ╱</div><div class="building b1"></div><div class="building b2"></div><div class="building b3"></div><div class="water"></div></div>
+          <div class="hero-art-label">MONITORAMENTO COMUNITÁRIO <span>●</span> SP</div>
+        </div>
+      </section>
+
+      <div class="emergency-note" role="note">
+        <span class="note-icon" aria-hidden="true">i</span>
+        <p><strong>Informações não verificadas.</strong> Este sistema não emite alertas oficiais nem confirma risco de enchente. Em emergência, procure a Defesa Civil (199) ou o Corpo de Bombeiros (193).</p>
+      </div>
+
+      <section class="metrics" aria-label="Indicadores de ocorrências">
+        <div class="metric"><div class="metric-top"><span>Total de relatos</span><span class="metric-symbol">◎</span></div><strong id="total">—</strong><small>Registros cadastrados</small></div>
+        <div class="metric"><div class="metric-top"><span>Em aberto</span><span class="metric-symbol orange">◷</span></div><strong id="abertos">—</strong><small>Aguardando acompanhamento</small></div>
+        <div class="metric"><div class="metric-top"><span>Resolvidos</span><span class="metric-symbol green">✓</span></div><strong id="resolvidos">—</strong><small>Registros encerrados</small></div>
+      </section>
+
+      <div class="dashboard-grid">
+        <section class="panel panel-occurrences" aria-labelledby="titulo-ocorrencias">
+          <div class="panel-header"><div><span class="eyebrow dark">COMUNIDADE</span><h2 id="titulo-ocorrencias">Ocorrências recentes</h2><p>Relatos enviados por cidadãos, ainda sem verificação oficial.</p></div><button class="secondary-btn" id="atualizar" type="button">↻ Atualizar</button></div>
+          <div class="filter-row"><label for="filtro">Filtrar por situação</label><select id="filtro"><option value="">Todas as situações</option><option value="aberto">Em aberto</option><option value="em_analise">Em análise</option><option value="resolvido">Resolvido</option></select></div>
+          <div id="mensagem-lista" class="feedback" role="status" aria-live="polite"></div>
+          <div id="lista" class="incident-list"></div>
+        </section>
+
+        <aside class="side-column">
+          <section class="panel weather-panel" aria-labelledby="titulo-clima">
+            <div class="panel-header"><div><span class="eyebrow dark">DADOS EXTERNOS • OPEN-METEO</span><h2 id="titulo-clima">Próximas 24 horas</h2><p>Previsão de chuva para o centro de São Paulo.</p></div></div>
+            <div class="weather-focus"><div class="weather-graphic" aria-hidden="true">☁<span>﹨ ﹨</span></div><div><strong id="chuva-mm">—</strong><small>mm de chuva previstos</small></div></div>
+            <div class="weather-secondary"><span>Maior probabilidade horária</span><strong id="chuva-prob">—</strong></div>
+            <p class="muted footnote" id="clima-atualizado">Aguardando consulta meteorológica...</p>
+            <p class="weather-disclaimer">Previsões não representam medições locais nem risco de alagamento. Fonte: <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo</a>.</p>
+          </section>
+
+          <section class="panel form-panel" id="registrar" aria-labelledby="titulo-registrar">
+            <span class="eyebrow dark">PARTICIPE</span><h2 id="titulo-registrar">Novo relato</h2>
+            <p>Selecione somente informações gerais. Não informe nomes ou endereços completos.</p>
+            <form id="form-ocorrencia">
+              <label for="regiao">Região de São Paulo</label>
+              <select name="regiao" id="regiao" required><option value="">Selecione a região</option><option value="centro">Centro</option><option value="zona_norte">Zona Norte</option><option value="zona_sul">Zona Sul</option><option value="zona_leste">Zona Leste</option><option value="zona_oeste">Zona Oeste</option></select>
+              <label for="tipo">Tipo de ocorrência</label>
+              <select name="tipo" id="tipo" required><option value="">Selecione o tipo</option><option value="alagamento">Alagamento</option><option value="bueiro_obstruido">Bueiro obstruído</option><option value="via_intransitavel">Via prejudicada</option></select>
+              <label for="intensidade">Intensidade informada</label>
+              <select name="intensidade" id="intensidade" required><option value="">Selecione a intensidade</option><option value="baixa">Baixa</option><option value="moderada">Moderada</option><option value="alta">Alta</option></select>
+              <button type="submit" class="primary-btn" id="enviar">Enviar relato <span aria-hidden="true">↗</span></button>
+              <div id="mensagem-form" class="feedback" role="status" aria-live="polite"></div>
+            </form>
+          </section>
+        </aside>
+      </div>
+
+      <section class="admin-section" aria-labelledby="titulo-admin">
+        <div><span class="eyebrow dark">ÁREA DE MODERAÇÃO</span><h2 id="titulo-admin">Gerenciar registros</h2><p>Para atualizar a situação ou excluir um relato, informe a chave administrativa configurada no servidor. Ela não é gravada pelo navegador.</p></div>
+        <div class="admin-key"><label for="admin-key">Chave administrativa</label><input type="password" autocomplete="off" spellcheck="false" id="admin-key" placeholder="Chave definida no .env"></div>
+      </section>
+    </main>
+    <footer><span>Alerta<span class="footer-highlight">Bairro</span> • Global Solution / Coding for Security</span><span>ODS 9 · 11 · 13 &nbsp; | &nbsp; Dados climáticos: Open-Meteo</span></footer>
+  </div>
+</body>
+</html>
