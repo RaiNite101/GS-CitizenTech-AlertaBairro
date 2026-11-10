@@ -158,3 +158,21 @@ $('form-ocorrencia').addEventListener('submit', async (evento) => {
 $('atualizar').addEventListener('click', atualizarDados);
 $('filtro').addEventListener('change', carregarOcorrencias);
 Promise.all([atualizarDados(), carregarClima()]);
+
+// Atalhos visuais para os filtros, mantendo a API e o seletor originais.
+const filtrosRapidos = document.querySelectorAll('.filter-chip');
+function sincronizarFiltros() {
+  const atual = $('filtro').value;
+  filtrosRapidos.forEach(botao => {
+    const ativo = botao.dataset.status === atual;
+    botao.classList.toggle('active', ativo);
+    botao.setAttribute('aria-pressed', String(ativo));
+  });
+}
+filtrosRapidos.forEach(botao => botao.addEventListener('click', () => {
+  $('filtro').value = botao.dataset.status;
+  sincronizarFiltros();
+  carregarOcorrencias();
+}));
+$('filtro').addEventListener('change', sincronizarFiltros);
+sincronizarFiltros();
